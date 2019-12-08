@@ -1,20 +1,40 @@
 package blog.dao
-import com.mongodb.client.MongoClients
+
+import org.json4s._
+import org.json4s.native.JsonMethods._
+import com.mongodb.client.{MongoClient, MongoClients}
+import com.mongodb.client.model.Filters.{eq => mongoEq}
+
 import blog.Blog
 import org.bson.Document
+import org.bson.types.ObjectId
 
-object Mongo {
-  val mongo = MongoClients.create("mongodb://jimmy:pass@localhost:27017/blog")
-  val database = mongo.getDatabase("blog")
-  val collection = database.getCollection("blogs")
+case class Mongo(
+    mongo: MongoClient =
+      MongoClients.create("mongodb://jimmy:pass@localhost:27017/blog")
+) {
+
+  private val blogCollection = mongo
+    .getDatabase("blog")
+    .getCollection("blogs")
 
   def createBlog(blog: Blog): Blog = {
-    val doc = new Document("author_id", blog.authorId)
+    val doc = new Document("authorId", blog.authorId)
       .append("title", blog.title)
-      .append("content", blog.content)
+      .append("content", blog.content + " saved!")
 
-    collection.insertOne(doc)
+    blogCollection.insertOne(doc)
 
     blog.copy(id = doc.getObjectId("_id").toString)
+  }
+
+  def readBlog(
+      id: String
+  )(implicit formats: Formats = DefaultFormats): Option[Blog] = {
+    Option {
+      blogCollection.find(mongoEq("_id", new ObjectId(id))).first
+    }.map(_.toJson)
+      .map(parse(_))
+      .flatMap(_.extractOpt[Blog])
   }
 }

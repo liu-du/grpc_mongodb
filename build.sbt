@@ -17,6 +17,8 @@ lazy val root = (project in file("."))
       "com.thesamet.scalapb" %% "scalapb-runtime-grpc" % scalapb.compiler.Version.scalapbVersion,
       // mongodb
       "org.mongodb" % "mongodb-driver-sync" % "3.11.2",
+      // json
+      "org.json4s" %% "json4s-native" % "3.6.7",
       // scalatest
       scalaTest % Test
     )

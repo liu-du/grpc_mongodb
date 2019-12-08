@@ -8,11 +8,16 @@ option (scalapb.options) = {
 
 message Blog {
   string id = 1;
-  string author_id = 2;
+  string authorId = 2;
   string title = 3;
   string content = 4;
 }
 
+message ProtoString {
+  string id = 1;
+}
+
 service BlogService {
   rpc CreateBlog (Blog) returns (Blog) {};
+  rpc ReadBlog (ProtoString) returns (Blog) {};
 }
