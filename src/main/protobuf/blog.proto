@@ -17,7 +17,14 @@ message ProtoString {
   string id = 1;
 }
 
+message EmptyMessage {
+
+}
+
 service BlogService {
   rpc CreateBlog (Blog) returns (Blog) {};
   rpc ReadBlog (ProtoString) returns (Blog) {};
+  rpc UpdateBlog (Blog) returns (Blog) {};
+  rpc deleteBlog (Blog) returns (ProtoString) {};
+  rpc listBlog (EmptyMessage) returns (stream Blog) {};
 }
