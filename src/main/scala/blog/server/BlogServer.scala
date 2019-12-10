@@ -1,9 +1,9 @@
 package com.liudu.blog.server
 
+import scala.concurrent.ExecutionContext.global
 import io.grpc.ServerBuilder
 import blog.BlogServiceGrpc
 import blog.server.BlogServiceImpl
-import scala.concurrent.ExecutionContext.global
 
 object BlogServer {
   def main(args: Array[String]): Unit = {

@@ -3,11 +3,11 @@ package blog.server
 import scala.concurrent.Future
 import scala.concurrent.ExecutionContext.Implicits._
 import com.mongodb.client.MongoClient
-import blog.dao.Mongo
+import io.grpc.stub.StreamObserver
 import blog.BlogServiceGrpc.BlogService
 import blog.{Blog, ProtoString, EmptyMessage}
-import io.grpc.stub.StreamObserver
-import Mongo.defaultFormats
+import blog.dao.Mongo
+import blog.dao.Mongo.defaultFormats
 
 object BlogServiceImpl extends BlogService {
   val mongo: Mongo = Mongo()

@@ -1,18 +1,17 @@
 package blog.dao
 
+import collection.JavaConverters._
 import org.json4s.Formats
 import org.json4s.native.JsonMethods._
-import com.mongodb.client.{MongoClient, MongoClients}
-import com.mongodb.client.model.Filters.{eq => mongoEq}
-
-import blog.Blog
 import org.bson.Document
 import org.bson.types.ObjectId
-import collection.JavaConverters._
+import com.mongodb.client.{MongoClient, MongoClients}
+import com.mongodb.client.model.Filters.{eq => mongoEq}
+import blog.Blog
 
 case class Mongo(
   mongo: MongoClient = MongoClients.create("mongodb://jimmy:pass@localhost:27017/blog")
-  )(implicit formats: Formats) {
+  ) {
 
   private val blogCollection = mongo
     .getDatabase("blog")
@@ -28,7 +27,7 @@ case class Mongo(
     blog.copy(id = doc.getObjectId("_id").toString)
   }
 
-  def readBlog(id: String): Option[Blog] = 
+  def readBlog(id: String)(implicit formats: Formats): Option[Blog] = 
     for {
       doc <- Option(blogCollection.find(mongoEq("_id", new ObjectId(id))).first)
       blog <- parse(doc.toJson).extractOpt[Blog]
@@ -51,7 +50,7 @@ case class Mongo(
     else Some(blog.id)
   }
 
-  def listBlogs: Iterable[Blog] = 
+  def listBlogs(implicit formats: Formats): Iterable[Blog] = 
     for {
       doc <- blogCollection.find().asScala
       blog <- parse(doc.toJson).extractOpt[Blog]

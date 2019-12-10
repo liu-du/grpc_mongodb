@@ -1,16 +1,12 @@
 package blog.client
 
-import blog.common.Channel
-import blog.BlogServiceGrpc
-import blog.Blog
-
 import scala.concurrent.Await
 import scala.concurrent.duration._
 import scala.concurrent.ExecutionContext.Implicits._
-import blog.ProtoString
-import io.grpc.stub.StreamObserver
-import blog.EmptyMessage
 import java.util.concurrent.CountDownLatch
+import io.grpc.stub.StreamObserver
+import blog.common.Channel
+import blog.{Blog, ProtoString, EmptyMessage, BlogServiceGrpc}
 
 object Client extends Channel {
   val client = BlogServiceGrpc.stub(channel)
